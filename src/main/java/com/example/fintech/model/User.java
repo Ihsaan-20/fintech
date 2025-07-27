@@ -1,43 +1,61 @@
 package com.example.fintech.model;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import jakarta.persistence.*;
 import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
 @Entity
 @Table(name = "users", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "email")
+        @UniqueConstraint(columnNames = "mobileNumber"),
+        @UniqueConstraint(columnNames = "username")
 })
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
     @Size(max = 40)
-    private String name;
+    private String firstName; // ✅ Optional
 
-    @NotBlank
     @Size(max = 40)
-    @Email
-    private String email;
+    private String middleName; // ✅ Optional
 
-    @NotBlank
+    @Size(max = 40)
+    private String lastName; // ✅ Optional
+
     @Size(max = 100)
-    private String password;
+    private String password; // ✅ Optional at start
+
+    @NotBlank
+    @Pattern(regexp = "^[0-9]{11}$", message = "Mobile number must be 11 digits")
+    @Column(unique = true)
+    private String mobileNumber; // ✅ Required
+
+    @Size(max = 100)
+    @Column(unique = true)
+    private String username; // ✅ Optional at start — generate later
 
     private BigDecimal balance = BigDecimal.ZERO;
 
-    public User(String name, String email, String password) {
-        this.name = name;
-        this.email = email;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Card card;
+
+    public User(String firstName, String middleName, String lastName, String password, String mobileNumber, String username) {
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
         this.password = password;
+        this.mobileNumber = mobileNumber;
+        this.username = username;
+    }
+
+    public User(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
     }
 }
