@@ -1,5 +1,6 @@
 package com.example.fintech.dto;
 
+import com.example.fintech.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -7,16 +8,13 @@ import lombok.Data;
 @AllArgsConstructor
 public class AuthResponse {
     private String accessToken;
-    private String tokenType = "Bearer"; // Default value
-    private Long userId;
-    private String email;
-    private String name;
+    private String tokenType = "Bearer";
+    private UserResponse user;  // Change from User to UserResponse
 
-    // Constructor without tokenType (it will use the default)
-    public AuthResponse(String accessToken, Long userId, String email, String name) {
+    public AuthResponse(String accessToken, UserResponse user) {
         this.accessToken = accessToken;
-        this.userId = userId;
-        this.email = email;
-        this.name = name;
+        this.user = user;
     }
 }
+
+

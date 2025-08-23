@@ -48,22 +48,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/",
-                                "/favicon.ico",
-                                "/*.png",
-                                "/*.gif",
-                                "/*.svg",
-                                "/*.jpg",
-                                "/*.html",
-                                "/css/**",
-                                "/js/**",
-                                "/images/**",
-                                "/webjars/**",
-                                "/",
-                                "/register",
-                                "/login",
                                 "/api/auth/**",
-                                "/api/user/checkUsernameAvailability",
-                                "/api/user/checkEmailAvailability"
+                                "/api/v1/verification/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

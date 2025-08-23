@@ -7,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
@@ -15,18 +16,24 @@ import java.util.Objects;
 public class UserPrincipal implements UserDetails {
     private final Long id;
     private final String name;
-    private final String email;
+    private final String mobileNumber;
+    private final BigDecimal balance;
 
     @JsonIgnore
     private final String password;
 
     private final Collection<? extends GrantedAuthority> authorities;
 
-    public UserPrincipal(Long id, String name, String email, String password,
+    public UserPrincipal(Long id,
+                         String name,
+                         String mobileNumber,
+                         BigDecimal balance,
+                         String password,
                          Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.name = name;
-        this.email = email;
+        this.mobileNumber = mobileNumber;
+        this.balance = balance;
         this.password = password;
         this.authorities = authorities;
     }
@@ -34,8 +41,9 @@ public class UserPrincipal implements UserDetails {
     public static UserPrincipal create(User user) {
         return new UserPrincipal(
                 user.getId(),
-                user.getName(),
-                user.getEmail(),
+                user.getFirstName() != null ? user.getFirstName() : "",
+                user.getMobileNumber(),
+                user.getBalance(), // 👈 make sure your `User` entity has `balance` or `balance` field
                 user.getPassword(),
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
         );
@@ -43,7 +51,7 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return mobileNumber;
     }
 
     @Override
@@ -69,13 +77,13 @@ public class UserPrincipal implements UserDetails {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof UserPrincipal)) return false;
         UserPrincipal that = (UserPrincipal) o;
-        return Objects.equals(id, that.id);
+        return Objects.equals(getId(), that.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(getId());
     }
 }

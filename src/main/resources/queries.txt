@@ -1,0 +1,14 @@
+INSERT INTO `bank_accounts` (`id`, `bank_name`, `account_holder_name`, `account_number`) VALUES (1, 'HBL', 'Irfan Gohar', 'PK36HBL01234567890123454');
+INSERT INTO `bank_accounts` (`id`, `bank_name`, `account_holder_name`, `account_number`) VALUES (2, 'UBL', 'Aziz Gohar', 'PK86UBL01234567890123454');
+INSERT INTO `bank_accounts` (`id`, `bank_name`, `account_holder_name`, `account_number`) VALUES (3, 'Easypaisa', 'Aftab Gohar', '03157073693');
+INSERT INTO `bank_accounts` (`id`, `bank_name`, `account_holder_name`, `account_number`) VALUES (4, 'Nayapay', 'Usman Chandio', '03157073694');
+INSERT INTO `bank_accounts` (`id`, `bank_name`, `account_holder_name`, `account_number`) VALUES (5, 'Jazzcash', 'Wajid Jokhio', '03157073695');
+
+
+CREATE TABLE `bank_accounts` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `bank_name` varchar(255) DEFAULT NULL,
+  `account_holder_name` varchar(255) DEFAULT NULL,
+  `account_number` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;

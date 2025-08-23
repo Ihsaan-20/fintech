@@ -3,7 +3,7 @@ package com.example.fintech.service;
 import com.example.fintech.dto.AuthResponse;
 import com.example.fintech.dto.LoginRequest;
 import com.example.fintech.dto.SignUpRequest;
-import com.example.fintech.exception.BadRequestException;
+import com.example.fintech.dto.UserResponse;
 import com.example.fintech.model.User;
 import com.example.fintech.security.JwtTokenProvider;
 import com.example.fintech.security.UserPrincipal;
@@ -23,18 +23,19 @@ public class AuthService {
     private final UserService userService;
 
     public AuthResponse authenticateUser(LoginRequest loginRequest) {
+        // Use mobileNumber instead of email
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginRequest.getEmail(),
+                        loginRequest.getMobileNumber(),  // changed here
                         loginRequest.getPassword()
                 )
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-
+        UserResponse userResponse = new UserResponse(userPrincipal.getId(), userPrincipal.getMobileNumber(), userPrincipal.getName(), userPrincipal.getBalance());
         String jwt = tokenProvider.generateToken(authentication);
-        return new AuthResponse(jwt, userPrincipal.getId(), userPrincipal.getEmail(), userPrincipal.getName());
+        return new AuthResponse(jwt, userResponse);
     }
 
     public AuthResponse registerUser(SignUpRequest signUpRequest) {
@@ -42,7 +43,7 @@ public class AuthService {
 
         // Auto login after registration
         LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setEmail(signUpRequest.getEmail());
+        loginRequest.setMobileNumber(signUpRequest.getMobileNumber());  // changed here
         loginRequest.setPassword(signUpRequest.getPassword());
 
         return authenticateUser(loginRequest);

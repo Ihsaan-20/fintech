@@ -1,4 +1,4 @@
 package com.example.fintech.dto.payload;
 
-public record OtpPayload() {
-}
+public record OtpPayload(String otp) {}
+

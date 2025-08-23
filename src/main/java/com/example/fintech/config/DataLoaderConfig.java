@@ -13,11 +13,14 @@ public class DataLoaderConfig {
     CommandLineRunner loadDummyData(BankAccountRepository repo) {
         return args -> {
             repo.deleteAll();
-            repo.save(new BankAccount(1L, "HBL", "PK36HBL01234567890123454", "Irfan Gohar"));
-            repo.save(new BankAccount(2L, "UBL", "PK86UBL01234567890123454", "Aziz Gohar"));
-            repo.save(new BankAccount(3L, "Easypaisa", "03157073693", "Aftab Gohar"));
-            repo.save(new BankAccount(4L, "Nayapay", "03157073694", "Usman Chandio"));
-            repo.save(new BankAccount(5L, "Jazzcash", "03157073695", "Wajid Jokhio"));
+
+            repo.save(new BankAccount("HBL", "1025136351009896", "PK50MUCB1025136351009896", "Irfan Gohar"));
+            repo.save(new BankAccount("UBL", "1025136351009897", "PK50MUCB1025136351009897", "Aziz Gohar"));
+            repo.save(new BankAccount("Easypaisa", "03157073693", null, "Aftab Gohar"));
+            repo.save(new BankAccount("Nayapay", "03157073694", null, "Usman Chandio"));
+            repo.save(new BankAccount("Jazzcash", "03157073695", null, "Wajid Jokhio"));
+            repo.save(new BankAccount("Sadapay", "03157073696", null, "Hamza Chandio")); // example additional wallet
         };
     }
+
 }
