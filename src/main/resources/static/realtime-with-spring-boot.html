@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Realtime Graph</title>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
+</head>
+<body>
+<div id="container" style="height:400px; width:800px;"></div>
+
+<script>
+    // Highcharts init
+    const chart = Highcharts.chart('container', {
+      chart: { type: 'line' },
+      title: { text: 'Realtime Graph' },
+      xAxis: { type: 'datetime' },
+      series: [{ name: 'Random Data', data: [] }]
+    });
+
+    // 1) Load initial data
+    const token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIwMzE1NzA3MzY5MiIsImlhdCI6MTc1OTE0Njc4MCwiZXhwIjoxNzU5MjMzMTgwfQ.denHI8xwOahAS6NybSI-zX57QWTETFfuL5RbVsMOYpjTTwqYZOirJ5le_Q2A_qPB8ZfqMbU9zTrsa384I3welA";
+
+      fetch("http://localhost:3000/api/v1/verification/graph")
+      .then(res => res.json())
+      .then(data => {
+        chart.series[0].setData(
+          data.map(obj => [obj.ts, obj.value])
+        );
+      });
+
+    // 2) Connect WebSocket for live data
+    const socket = new SockJS("http://localhost:3000/ws");
+    const stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, frame => {
+      console.log("Connected: " + frame);
+
+      // WebSocket data
+        stompClient.subscribe("/topic/graph", message => {
+          const obj = JSON.parse(message.body);
+          chart.series[0].addPoint([obj.ts, obj.value], true, chart.series[0].data.length > 20);
+        });
+
+    });
+</script>
+</body>
+</html>

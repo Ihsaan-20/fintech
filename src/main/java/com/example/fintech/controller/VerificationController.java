@@ -9,15 +9,34 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
-@CrossOrigin(origins = "http://localhost:3000")
+//@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/v1/verification")
 @RequiredArgsConstructor
 public class VerificationController {
 
     private final VerificationService verificationService;
+
+//    @GetMapping("/graph")
+//    public List<GraphPoint> getData() {
+////        long now = System.currentTimeMillis();
+////        Random random = new Random();
+////
+////        return List.of(
+////                new GraphPoint(now, random.nextInt(50), random.nextInt(100)),         // ts, upload, download
+////                new GraphPoint(now + 1000, random.nextInt(50), random.nextInt(100)),
+////                new GraphPoint(now + 2000, random.nextInt(50), random.nextInt(100)),
+////                new GraphPoint(now + 3000, random.nextInt(50), random.nextInt(100)),
+////                new GraphPoint(now + 4000, random.nextInt(50), random.nextInt(100))
+////        );
+//    }
+
+
 
     @PostMapping("/send-otp")
     public ResponseEntity<ApiResponse<Map<String, String>>> sendOtp(@Valid @RequestBody SendOtp sendOtp) {

@@ -49,7 +49,10 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/",
                                 "/api/auth/**",
-                                "/api/v1/verification/**"
+                                "/api/v1/verification/**",
+                                "/api/v1/verification/**",
+                                "/ws/**",          // WebSocket endpoint allow karna na bhoolna
+                                "/topic/**"        // STOMP destinations bhi
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
